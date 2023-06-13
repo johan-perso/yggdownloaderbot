@@ -1,0 +1,22 @@
+{
+	"name": "yggdownloaderbot",
+	"version": "1.0.0",
+	"description": "Un bot Telegram pour rechercher et télécharger des torrents",
+	"main": "index.js",
+	"scripts": {
+		"start": "node index.js",
+		"dev": "nodemon index.js"
+	},
+	"author": "JohanStickman",
+	"license": "MIT",
+	"dependencies": {
+		"@tsmx/human-readable": "^2.0.0",
+		"dotenv": "^14.2.0",
+		"execa": "^5.1.1",
+		"he": "^1.2.0",
+		"node-fetch": "^2.6.1",
+		"node-html-parser": "^6.1.5",
+		"telegraf": "^4.6.0",
+		"webtorrent": "1.9.7"
+	}
+}
