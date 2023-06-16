@@ -1,5 +1,3 @@
-<!-- TODO: dans le changelog dire que genre "breaking change: dans le fichier .env la variable TORRENTS_PATH est devenu DOWNLOAD_PATH -->
-
 # yggDownloaderBot
 
 Ce bot Telegram vous permet de rechercher et télécharger des torrents depuis les plateformes d'YggTorrent et de "Cpasbien". Cela peut être utilisé pour faciliter le téléchargement de fichiers sur un serveur de médias comme Plex ou un NAS, mais aussi pour faire des recherches depuis votre téléphone puisqu'il est possible de désactiver le téléchargement des fichiers depuis le bot. Il est également possible de télécharger directement en envoyant l'URL d'un fichier torrent, d'une vidéo ou d'une playlist YouTube.
@@ -46,7 +44,7 @@ npm install
 ```sh
 BOT_TOKEN=token_du_bot_telegram # Token du bot Telegram, obtenu avec BotFather
 AUTHORIZED_USERS=123456789,987654321 # Liste des IDs des utilisateurs autorisés, séparés par des virgules. Obtenir son ID : https://www.youtube.com/watch?v=e_d3KqI6zkI
-DOWNLOAD_PATH= # Chemin vers le dossier où seront téléchargés les fichiers. Exemple : /home/user/Downloads. Si non renseigné, les torrents ne seront pas téléchargés.
+DOWNLOAD_PATH= # Chemin vers le dossier où seront téléchargés les fichiers. Exemple : /home/user/Downloads. Si non renseigné, les torrents ne seront pas téléchargés. Le dossier doit déjà exister.
 ```
 
 4. Lancer le bot
