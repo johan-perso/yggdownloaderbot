@@ -1,7 +1,7 @@
 {
 	"name": "yggdownloaderbot",
-	"version": "1.0.0",
-	"description": "Un bot Telegram pour rechercher et télécharger des torrents",
+	"version": "2.0.0",
+	"description": "Un bot Telegram pour rechercher et télécharger des torrents, ainsi que des vidéos et musiques depuis YouTube",
 	"main": "index.js",
 	"scripts": {
 		"start": "node index.js",
@@ -10,13 +10,17 @@
 	"author": "JohanStickman",
 	"license": "MIT",
 	"dependencies": {
+		"@fabricio-191/youtube": "^0.0.4",
 		"@tsmx/human-readable": "^2.0.0",
 		"dotenv": "^14.2.0",
 		"execa": "^5.1.1",
+		"fluent-ffmpeg": "^2.1.2",
+		"genius-lyrics": "^4.4.3",
 		"he": "^1.2.0",
 		"node-fetch": "^2.6.1",
 		"node-html-parser": "^6.1.5",
 		"telegraf": "^4.6.0",
-		"webtorrent": "1.9.7"
+		"webtorrent": "1.9.7",
+		"ytdl-core": "^4.11.4"
 	}
 }
