@@ -49,8 +49,10 @@ bot.on('message', async (ctx) => {
 	var split = ctx.message.text.split(' ')
 	if(((ctx.message.text.startsWith('http://') || ctx.message.text.startsWith('https://')) && !ctx.message.text.startsWith('https://watch.plex.tv/')) || (split.length > 0 && split.every(number => !isNaN(number)))){
 		// Supporter les téléchargements à partir de YouTube
-		console.log(ctx.message.text)
 		if(ctx.message.text.startsWith('https://youtube.com/') || ctx.message.text.startsWith('https://www.youtube.com/') || ctx.message.text.startsWith('https://youtu.be/') || ctx.message.text.startsWith('https://music.youtube.com/')){
+			// Si on a pas de chemin de téléchargement, on le dit
+			if(!process.env.DOWNLOAD_PATH) return ctx.replyWithHTML("Veuillez configurer le chemin de téléchargement dans le fichier .env pour utiliser cette fonctionnalité.").catch(err => {})
+
 			// Déterminer si c'est une playlist ou une vidéo, et si c'est une musique ou une vidéo
 			var isPlaylist = ctx.message.text.includes('/playlist?list=')
 			var isMusic = ctx.message.text.startsWith('https://music.youtube.com/')
