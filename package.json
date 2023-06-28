@@ -1,6 +1,6 @@
 {
 	"name": "yggdownloaderbot",
-	"version": "2.0.0",
+	"version": "2.1.0",
 	"description": "Un bot Telegram pour rechercher et télécharger des torrents, ainsi que des vidéos et musiques depuis YouTube",
 	"main": "index.js",
 	"scripts": {
