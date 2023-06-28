@@ -67,6 +67,8 @@ Le bot vous répondra avec une liste de résultats, vous pourrez choisir lequel 
 
 Si vous avez renseigné le chemin vers le dossier de téléchargement (`DOWNLOAD_PATH` dans le fichier .env), le bot téléchargera les fichiers dans ce dossier. Sinon, il ne vous enverra que le lien du torrent (vous pourrez utiliser une application comme [bittorrent](https://www.bittorrent.com/) pour le télécharger), et la fonctionnalité de téléchargement à partir de YouTube sera désactivée.
 
+> Pour la recherche de torrents manuelle, vous pouvez vous rendre sur le puissant site [bt4g](https://bt4g.org/), qui permet de rechercher des torrents sur plusieurs sites de torrents en même temps.
+
 
 ## Licence
 
