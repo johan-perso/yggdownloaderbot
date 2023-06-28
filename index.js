@@ -29,6 +29,7 @@ bot.command('start', async (ctx) => {
 	console.log(`@${ctx.message.from.username || ctx.message.from.first_name} (ID: ${ctx.message.from.id}) a utilisé /start`)
 })
 
+// TODO: vérifier si le bot ne crash pas, et refuse bien certaines personnes quand il est invité dans un groupe
 // Pour chaque nouveau message
 var searchResult = {}
 bot.on('message', async (ctx) => {
@@ -150,38 +151,50 @@ bot.on('message', async (ctx) => {
 			var client = new WebTorrent()
 
 			// Télécharger chaque torrents
-			for(var torrent of torrents){
-				// Si on a pas encore le lien
-				if(!downloadLink){
-					// Obtenir le code de la page du torrent
-					var download = await fetch(torrent.link).then(res => res.text()).catch(err => { return err })
-					download = htmlParser.parse(download)
+			for(var i = 0; i < torrents.length; i++){
+				// Obtenir le code de la page du torrent
+				var download = await fetch(torrents[i].link).then(res => res.text()).catch(err => { return err })
+				download = htmlParser.parse(download)
 
-					// Obtenir le lien de téléchargement sur cette page
-					if(torrent.link.startsWith('https://www.cpasbien.sk')) downloadLink = download.querySelector("div.btn-download > a").getAttribute('href') ? `https://www.cpasbien.sk${download.querySelector("div.btn-download > a").getAttribute('href')}` : null
-					else downloadLink = download.querySelector("table.infos-torrent > tbody").querySelector('a.butt').getAttribute('href')
+				// Obtenir le lien de téléchargement sur cette page
+				if(torrents[i].link.startsWith('https://www.cpasbien.sk')) downloadLink = download.querySelector("div.btn-download > a").getAttribute('href') ? `https://www.cpasbien.sk${download.querySelector("div.btn-download > a").getAttribute('href')}` : null
+				else downloadLink = download.querySelector("table.infos-torrent > tbody").querySelector('a.butt').getAttribute('href')
 
-					// Si on a pas de lien, on le dit, et si on l'a, on le dit aussi
-					if(!downloadLink) return ctx.replyWithHTML("Impossible de trouver le lien de téléchargement").catch(err => {})
-					ctx.replyWithHTML(`Le lien a été trouvé !${process.env.DOWNLOAD_PATH ? ` Veuillez patienter pendant le téléchargement ${downloadLink.startsWith('http') ? `de <u>${downloadLink}</u>` : 'du torrent'}` : `\n${downloadLink}`}`).catch(err => {})
-				}
+				// Si on a pas de lien, on le dit, et si on l'a, on le dit aussi
+				if(!downloadLink) return ctx.replyWithHTML("Impossible de trouver le lien de téléchargement").catch(err => {})
+				ctx.replyWithHTML(`Le lien a été trouvé !${process.env.DOWNLOAD_PATH ? ` Veuillez patienter pendant le téléchargement ${downloadLink.startsWith('http') ? `de <u>${downloadLink}</u>` : 'du torrent'}` : `\n${downloadLink}`}`).catch(err => {})
 
 				// Ajouter le torrent au client
 				if(process.env.DOWNLOAD_PATH){
 					var promise = new Promise((resolve, reject) => {
-						client.add(downloadLink, { downloadLimit: -1, path: process.env.DOWNLOAD_PATH }, torrent => {
+						var downloadMsg
+						var lastEditMsg
+						client.add(downloadLink, { downloadLimit: -1, path: process.env.DOWNLOAD_PATH }, async torrent => {
 							console.log('Téléchargement du torrent: ' + torrent.name)
-							ctx.replyWithHTML(`Téléchargement du torrent : <b>${torrent.name}</b> (${humanReadable.fromBytes(torrent.length)})`).catch(err => {})
+							downloadMsg = await ctx.replyWithHTML(`Téléchargement du torrent : <b>${torrent.name}</b> (${humanReadable.fromBytes(torrent.length)})`).catch(err => {})
 							torrent.on('done', () => {
 								console.log('Téléchargement terminé')
 								ctx.replyWithHTML(`Téléchargement terminé de : <b>${torrent.name}</b> (${humanReadable.fromBytes(torrent.length)}). Vous pouvez le retrouver sur Plex après avoir réactualisé l'index.`).catch(err => {})
 								torrent.destroy()
-								if(torrents.indexOf(torrent) == torrents.length-1) client.destroy()
+								if(torrents.length-1 == i) client.destroy()
 								resolve()
 							})
+							var oldPercent = 0
 							torrent.on('download', bytes => {
-								console.log(`${humanReadable.fromBytes(torrent.downloaded)} / ${humanReadable.fromBytes(torrent.length)}`)
+								// Déterminer le pourcentage de téléchargement
+								var percent = Math.round(torrent.progress * 100 * 100) / 100
+
+								// Log
+								console.log(`${parseInt(percent)}% - ${humanReadable.fromBytes(torrent.downloaded)}/${humanReadable.fromBytes(torrent.length)}`)
 								console.log('Vitesse: ' + humanReadable.fromBytes(torrent.downloadSpeed) + '/s')
+
+								// L'envoyer via le bot
+								if(parseInt(percent) > oldPercent){
+									oldPercent = parseInt(percent)
+									if(lastEditMsg && Date.now() - lastEditMsg < 2000) return // Si on a modifié il y a moins de 2 secondes, on ne modifie pas
+									lastEditMsg = Date.now()
+									ctx.telegram.editMessageText(ctx.chat.id, downloadMsg.message_id, null, `Téléchargement du torrent : <b>${torrent.name}</b>\n${parseInt(percent)}% - ${humanReadable.fromBytes(torrent.downloaded)}/${humanReadable.fromBytes(torrent.length)}\nVitesse: ${humanReadable.fromBytes(torrent.downloadSpeed)}/s`, { parse_mode: 'HTML' }).catch(err => {})
+								}
 							})
 							torrent.on('error', err => {
 								console.error(err)
