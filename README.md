@@ -74,4 +74,4 @@ Si vous avez renseigné le chemin vers le dossier de téléchargement (`DOWNLOAD
 
 ## Licence
 
-MIT © [Johan](https://johanstick.me)
+MIT © [Johan](https://johanstick.fr)
