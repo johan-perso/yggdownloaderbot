@@ -1,3 +1,6 @@
+> [!WARNING]  
+> Ce projet n'est plus maintenu, vous pouvez continuer de signaler des problèmes et j'essayerai de les régler, mais aucune fonctionnalité ne sera rajouté dans ce bot.
+
 # yggDownloaderBot
 
 Ce bot Telegram vous permet de rechercher et télécharger des torrents depuis les plateformes d'YggTorrent et de "Cpasbien". Cela peut être utilisé pour faciliter le téléchargement de fichiers sur un serveur de médias comme Plex ou un NAS, mais aussi pour faire des recherches depuis votre téléphone puisqu'il est possible de désactiver le téléchargement des fichiers depuis le bot. Il est également possible de télécharger directement en envoyant l'URL d'un fichier torrent, d'une vidéo ou d'une playlist YouTube.
